@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="1dp">
+
+
+    <ImageView
+        android:id="@+id/iv_profile_pic"
+        android:layout_width="80dp"
+        android:layout_height="120dp"
+        android:padding="5dp"
+        tools:src="@mipmap/ic_launcher" />
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:textStyle="bold"
+        tools:text="User Name"
+        android:layout_alignParentTop="true"
+        android:layout_alignLeft="@+id/tv_user"
+        android:layout_alignStart="@+id/tv_user" />
+
+    <TextView
+        android:id="@+id/tv_user"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_name"
+        android:layout_marginLeft="5dp"
+        android:layout_toEndOf="@+id/iv_profile_pic"
+        android:layout_toRightOf="@+id/iv_profile_pic"
+        android:autoLink="web"
+        android:gravity="left"
+        android:linksClickable="true"
+        android:textStyle="italic"
+        android:layout_alignBottom="@+id/iv_profile_pic"
+        tools:text="\@tweet_handle" />
+
+    <TextView
+        android:id="@+id/tv_body"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/iv_profile_pic"
+        android:layout_margin="5dp"
+        android:autoLink="web"
+        android:linksClickable="true"
+        android:textIsSelectable="true"
+        tools:text="This is the the body of the tweet." />
+
+    <TextView
+        android:id="@+id/tv_age"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_below="@+id/tv_body"
+        android:gravity="left"
+        tools:text="10m" />
+
+</RelativeLayout>

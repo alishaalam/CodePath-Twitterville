@@ -1,5 +1,7 @@
 package com.codepath.apps.twitterville.activities;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
@@ -13,12 +15,15 @@ import android.widget.Toast;
 import com.codepath.apps.twitterville.R;
 import com.codepath.apps.twitterville.adapters.TweetAdapter;
 import com.codepath.apps.twitterville.fragments.ComposeTweetDialogFragment;
+import com.codepath.apps.twitterville.helper.ClickListener;
 import com.codepath.apps.twitterville.helper.EndlessRecyclerViewScrollListener;
+import com.codepath.apps.twitterville.helper.RecyclerTouchListener;
 import com.codepath.apps.twitterville.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,8 +89,22 @@ public class TimeLineActivity extends AppCompatActivity implements ComposeTweetD
             }
         });
 
-        //TODO: Add on item click handling
+        //Adding on item click handling
+        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new ClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                Tweet tweet = tweetsList.get(position);
+                Context mContext = view.getContext();
+                Intent intent = new Intent(mContext, TweetDetailActivity.class);
+                intent.putExtra(TweetDetailActivity.ARG_ITEM, Parcels.wrap(tweet));
+                mContext.startActivity(intent);
+            }
 
+            @Override
+            public void onLongClick(View view, int position) {
+
+            }
+        }));
     }
 
     private void populateTimeLine(long max_id) {
@@ -147,17 +166,11 @@ public class TimeLineActivity extends AppCompatActivity implements ComposeTweetD
 
     public static long getLowestId(List<Tweet> list) {
         long min = Long.MAX_VALUE;
-        Log.d(TAG, "In getLowestId() Long.MAX_VALUE: " + Long.MAX_VALUE);
         for(Tweet t: list) {
             Log.d(TAG, "ID: " + t.getUid());
-            if(t.getUid() < min) {
+            if(t.getUid() < min)
                 min = t.getUid();
-                if(min == -1){
-                    Log.d(TAG, "In getLowestId() Lowest ID: " + min);
-                }
-            }
         }
-
         return min;
     }
 }

@@ -7,12 +7,12 @@ import com.activeandroid.annotation.Column;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcel;
 
 import java.util.ArrayList;
 
-
+@Parcel(analyze={Tweet.class})
 public class Tweet extends Model {
-
 
     @Column(name = "Body")
     public String body;

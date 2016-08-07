@@ -3,6 +3,7 @@ package com.codepath.apps.twitterville.viewholder;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.codepath.apps.twitterville.R;
@@ -15,11 +16,14 @@ import butterknife.ButterKnife;
  */
 public class TweetViewHolder extends RecyclerView.ViewHolder{
 
+    @BindView(R.id.iv_profile_pic)
+    public ImageView vTweetProfilePic;
+
     @BindView(R.id.tv_user)
     public TextView vTweetUsername;
 
     @Nullable @BindView(R.id.tv_name)
-    public TextView vTweetName;
+    public TextView vTweetHandle;
 
     @Nullable @BindView(R.id.tv_body)
     public TextView vTweetBody;

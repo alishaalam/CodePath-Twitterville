@@ -6,7 +6,9 @@ import com.activeandroid.query.Select;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcel;
 
+@Parcel(analyze={User.class})
 public class User extends Model {
 
     @Column(name = "Name")
@@ -15,8 +17,8 @@ public class User extends Model {
     @Column(name = "Uid", unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
     public Long uid;
 
-    String screenName;
-    String profileImageUrl;
+    public String screenName;
+    public String profileImageUrl;
 
     public User(){ super(); }
 

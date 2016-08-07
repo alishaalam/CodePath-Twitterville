@@ -3,11 +3,13 @@ package com.codepath.apps.twitterville.adapters;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
+import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.android.volley.toolbox.ImageLoader;
+import com.bumptech.glide.Glide;
 import com.codepath.apps.twitterville.R;
 import com.codepath.apps.twitterville.models.Tweet;
 import com.codepath.apps.twitterville.viewholder.TweetViewHolder;
@@ -24,9 +26,6 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetViewHolder> {
     Context mContext;
     ArrayList<Tweet> mTweetsList = new ArrayList<Tweet>();
     private static final String TAG = TweetAdapter.class.getSimpleName();
-    ImageLoader mImageLoader;
-
-
 
     public TweetAdapter(Context mContext, ArrayList<Tweet> mTweetsList) {
         this.mContext = mContext;
@@ -37,7 +36,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetViewHolder> {
     public TweetViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         mContext = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(mContext);
-        View view =inflater.inflate(R.layout.tweet_item_content, parent, false);
+        View view =inflater.inflate(R.layout.content_tweet_item, parent, false);
         TweetViewHolder tweetViewHolder = new TweetViewHolder(view);
         return  tweetViewHolder;
     }
@@ -46,9 +45,19 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetViewHolder> {
     public void onBindViewHolder(TweetViewHolder tweetViewHolder, int position) {
         Tweet tweet = mTweetsList.get(position);
         if(tweet != null) {
+
+            Glide.with(mContext)
+                    .load(tweet.getUser().getProfileImageUrl())
+                    .placeholder(R.mipmap.ic_launcher)
+                    .into(tweetViewHolder.vTweetProfilePic);
+
             tweetViewHolder.vTweetUsername.setText(tweet.getUser().getScreenName());
-            tweetViewHolder.vTweetName.setText(tweet.getUser().getName());
+            tweetViewHolder.vTweetUsername.setMovementMethod(LinkMovementMethod.getInstance());
+
+            tweetViewHolder.vTweetHandle.setText(tweet.getUser().getName());
+
             tweetViewHolder.vTweetBody.setText(tweet.getBody());
+            tweetViewHolder.vTweetBody.setMovementMethod(LinkMovementMethod.getInstance());
 
             String tweetAge = getTweetAge(tweet.getTweetTime());
             tweetViewHolder.vTweetAge.setText(tweetAge);
@@ -71,7 +80,17 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetViewHolder> {
         } catch (java.text.ParseException e) {
             e.printStackTrace();
         }
-        String ago = DateUtils.getRelativeTimeSpanString(formattedTimeInSecs, System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS).toString();
-        return ago;
+        String tweetAge = DateUtils.getRelativeTimeSpanString(formattedTimeInSecs, System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS).toString();
+        Log.v(TAG, "tweetAge:" + tweetAge);
+        tweetAge = tweetAge.replace(" second ago","s");
+        tweetAge = tweetAge.replace(" seconds ago","s");
+        tweetAge = tweetAge.replace(" minute ago","m");
+        tweetAge = tweetAge.replace(" minutes ago","m");
+        tweetAge = tweetAge.replace(" hour ago","h");
+        tweetAge = tweetAge.replace(" hours ago","h");
+        tweetAge = tweetAge.replace(" day ago","d");
+        tweetAge = tweetAge.replace(" days ago","d");
+        Log.v(TAG, "tweetAge:" + tweetAge);
+        return tweetAge;
     }
 }
