@@ -51,10 +51,10 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetViewHolder> {
                     .placeholder(R.mipmap.ic_launcher)
                     .into(tweetViewHolder.vTweetProfilePic);
 
-            tweetViewHolder.vTweetUsername.setText(tweet.getUser().getScreenName());
-            tweetViewHolder.vTweetUsername.setMovementMethod(LinkMovementMethod.getInstance());
+            tweetViewHolder.vTweetScreenName.setText(tweet.getUser().getScreenName());
+            tweetViewHolder.vTweetScreenName.setMovementMethod(LinkMovementMethod.getInstance());
 
-            tweetViewHolder.vTweetHandle.setText(tweet.getUser().getName());
+            tweetViewHolder.vTweetName.setText(tweet.getUser().getName());
 
             tweetViewHolder.vTweetBody.setText(tweet.getBody());
             tweetViewHolder.vTweetBody.setMovementMethod(LinkMovementMethod.getInstance());

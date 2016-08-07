@@ -19,11 +19,11 @@ public class TweetViewHolder extends RecyclerView.ViewHolder{
     @BindView(R.id.iv_profile_pic)
     public ImageView vTweetProfilePic;
 
-    @BindView(R.id.tv_user)
-    public TextView vTweetUsername;
+    @BindView(R.id.tv_screen_name)
+    public TextView vTweetScreenName;
 
     @Nullable @BindView(R.id.tv_name)
-    public TextView vTweetHandle;
+    public TextView vTweetName;
 
     @Nullable @BindView(R.id.tv_body)
     public TextView vTweetBody;

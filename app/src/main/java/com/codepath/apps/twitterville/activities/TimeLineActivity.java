@@ -1,6 +1,5 @@
 package com.codepath.apps.twitterville.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -83,8 +82,6 @@ public class TimeLineActivity extends AppCompatActivity implements ComposeTweetD
             public void onLoadMore(int page, int totalItemsCount) {
                 // Triggered only when new data needs to be appended to the list
                 // Add whatever code is needed to append new items to the bottom of the list
-                Log.d(TAG, "Page: " + page);
-                Log.d(TAG, "Lowest ID: " + getLowestId(tweetsList));
                 populateTimeLine( getLowestId(tweetsList));
             }
         });
@@ -94,10 +91,9 @@ public class TimeLineActivity extends AppCompatActivity implements ComposeTweetD
             @Override
             public void onClick(View view, int position) {
                 Tweet tweet = tweetsList.get(position);
-                Context mContext = view.getContext();
-                Intent intent = new Intent(mContext, TweetDetailActivity.class);
+                Intent intent = new Intent(TimeLineActivity.this, TweetDetailActivity.class);
                 intent.putExtra(TweetDetailActivity.ARG_ITEM, Parcels.wrap(tweet));
-                mContext.startActivity(intent);
+                startActivity(intent);
             }
 
             @Override

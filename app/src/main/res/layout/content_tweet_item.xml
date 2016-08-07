@@ -31,7 +31,7 @@
             android:textStyle="bold"/>
 
         <TextView
-            android:id="@+id/tv_user"
+            android:id="@+id/tv_screen_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="left"
@@ -48,8 +48,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="right"
-            android:layout_toEndOf="@+id/tv_user"
-            android:layout_toRightOf="@+id/tv_user"
+            android:layout_toEndOf="@+id/tv_screen_name"
+            android:layout_toRightOf="@+id/tv_screen_name"
             android:layout_alignParentRight="true"
             android:layout_margin="5dp"
             tools:text="10m"/>

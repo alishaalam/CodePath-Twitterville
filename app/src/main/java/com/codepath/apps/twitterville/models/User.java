@@ -51,7 +51,7 @@ public class User extends Model {
     }
 
     public String getScreenName() {
-        return screenName;
+        return String.format("@%s", screenName);
     }
 
     public static User fromUserId(Long userId) {
