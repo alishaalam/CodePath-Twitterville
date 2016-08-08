@@ -35,8 +35,6 @@ public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
 		setContentView(R.layout.activity_login);
 		ButterKnife.bind(this);
 		mExplosionField = ExplosionField.attach2Window(this);
-		//addListener(loginImage);
-
 		mHandler = new Handler();
 
 		rippleBackground = (RippleBackground) findViewById(R.id.content);
@@ -52,7 +50,6 @@ public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
 				startActivity(i);
 			}
 		}, 3000);
-
 	}
 
 	// OAuth authentication flow failed, handle the error
@@ -106,10 +103,7 @@ public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
 					Log.v(TAG, "Explosion!!!!!!!!!!!");
 				}
 			}, 2000);
-
 		}
 		COUNTER++;
 	}
-
-
 }

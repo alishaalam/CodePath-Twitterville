@@ -11,7 +11,7 @@ public class FragmentUtil{
 
 
     public static void showComposeTweetDialog(FragmentManager supportFragmentManager) {
-        ComposeTweetDialogFragment editNameDialogFragment = ComposeTweetDialogFragment.newInstance("Tweet");
+        ComposeTweetDialogFragment editNameDialogFragment = ComposeTweetDialogFragment.newInstance("");
         editNameDialogFragment.show(supportFragmentManager, "fragment_edit_name");
 
     }

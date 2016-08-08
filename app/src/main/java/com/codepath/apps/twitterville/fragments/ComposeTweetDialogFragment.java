@@ -50,11 +50,11 @@ public class ComposeTweetDialogFragment extends DialogFragment implements View.O
 
         // Fetch arguments from bundle and set title
         String screenName = getArguments().getString("screenName", "");
-        if(screenName != null) {
+        if(screenName.isEmpty()) {
+            btnText = "TWEET";
+        }else {
             mEtTweetBody.setText(screenName + " ");
             btnText = "REPLY";
-        }else {
-            btnText = "TWEET";
         }
         // Show soft keyboard automatically and request focus to field
         mEtTweetBody.requestFocus();
