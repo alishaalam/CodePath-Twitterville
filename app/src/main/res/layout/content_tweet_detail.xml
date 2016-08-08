@@ -73,4 +73,10 @@
         android:layout_margin="10dp"
         android:layout_below="@+id/tv_tweet_time"/>
 
+    <EditText
+        android:id="@+id/et_tweet_reply"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/action_divider"/>
+
 </RelativeLayout>

@@ -19,7 +19,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:titleTextColor="@android:color/black"
+            android:titleTextColor="@android:color/black"
             app:popupTheme="@style/AppTheme.PopupOverlay"
             tools:text="Title 1">
 
@@ -27,11 +27,10 @@
                 android:id="@+id/tv_title_custom_font"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="left|center"
-                android:titleTextColor="@color/colorAccent"
-                tools:text="Title"
-                android:textStyle="bold"
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
+                android:gravity="center"
+                android:titleTextColor="@android:color/black"
+                android:text="@string/app_name"
+                tools:text="Title 2"/>
 
         </android.support.v7.widget.Toolbar>
 
@@ -46,5 +45,7 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         android:src="@drawable/ic_tweet" />
-    
+
+
+
 </android.support.design.widget.CoordinatorLayout>

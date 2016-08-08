@@ -12,11 +12,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.codepath.apps.twitterville.R;
+import com.codepath.apps.twitterville.helper.FragmentUtil;
 import com.codepath.apps.twitterville.models.Tweet;
 
 import org.parceler.Parcels;
@@ -49,6 +52,9 @@ public class TweetDetailActivity extends AppCompatActivity {
     @BindView(R.id.tv_tweet_time)
     TextView tv_tweet_time;
 
+    @BindView(R.id.et_tweet_reply)
+    EditText et_tweet_reply;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +79,15 @@ public class TweetDetailActivity extends AppCompatActivity {
         tv_body.setText(mTweet.getBody());
         tv_tweet_time.setText(formatTweetTime(mTweet.getTweetTime()));
         Log.d(TAG, formatTweetTime(mTweet.getTweetTime()));
+
+
+        et_tweet_reply.setHint("Reply to " + mTweet.getUser().getScreenName());
+        et_tweet_reply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentUtil.showComposeTweetDialog(getSupportFragmentManager(), mTweet.getUser().getScreenName());
+            }
+        });
     }
 
     @Override

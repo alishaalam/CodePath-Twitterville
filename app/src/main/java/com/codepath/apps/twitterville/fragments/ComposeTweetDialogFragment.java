@@ -11,8 +11,6 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.codepath.apps.twitterville.R;
-import com.codepath.apps.twitterville.activities.TwitterApplication;
-import com.codepath.apps.twitterville.activities.TwitterClient;
 
 /**
  * Created by alishaalam on 8/6/16.
@@ -20,7 +18,6 @@ import com.codepath.apps.twitterville.activities.TwitterClient;
 public class ComposeTweetDialogFragment extends DialogFragment implements View.OnClickListener{
 
     EditText mEtTweetBody;
-    private TwitterClient client;
     Button btnPostTweet;
 
 
@@ -30,18 +27,12 @@ public class ComposeTweetDialogFragment extends DialogFragment implements View.O
         // Use `newInstance` instead as shown below
     }
 
-    public static ComposeTweetDialogFragment newInstance(String title) {
+    public static ComposeTweetDialogFragment newInstance(String screenName) {
         ComposeTweetDialogFragment frag = new ComposeTweetDialogFragment();
         Bundle args = new Bundle();
-        args.putString("title", title);
+        args.putString("screenName", screenName);
         frag.setArguments(args);
         return frag;
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        client = TwitterApplication.getRestClient(); //get a singleton client
     }
 
     @Override
@@ -53,16 +44,25 @@ public class ComposeTweetDialogFragment extends DialogFragment implements View.O
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        String btnText = null;
         // Get field from view
         mEtTweetBody = (EditText) view.findViewById(R.id.et_tweet_body);
+
+        // Fetch arguments from bundle and set title
+        String screenName = getArguments().getString("screenName", "");
+        if(screenName != null) {
+            mEtTweetBody.setText(screenName + " ");
+            btnText = "REPLY";
+        }else {
+            btnText = "TWEET";
+        }
         // Show soft keyboard automatically and request focus to field
         mEtTweetBody.requestFocus();
-        // Fetch arguments from bundle and set title
-        String title = getArguments().getString("title", "Tweet");
-        getDialog().setTitle(title);
+        getDialog().setTitle("Tweet");
         getDialog().getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         btnPostTweet = (Button) view.findViewById(R.id.btn_send_tweet);
+        btnPostTweet.setText(btnText);
         btnPostTweet.setOnClickListener(this);
     }
 
@@ -74,27 +74,10 @@ public class ComposeTweetDialogFragment extends DialogFragment implements View.O
         dismiss();
     }
 
-    // 1. Defines the listener interface with a method passing back filters as result to activity.
+    // Defines the listener interface with a method passing back filters as result to activity.
     public interface OnTweetPostedListener {
         void onPostTweet(String tweetBody);
     }
 
-    /*public void onTweetSubmit(View view) {
-
-        mEtTweetBody = (EditText) view.findViewById(R.id.et_tweet_body);
-        final String tweetBody = mEtTweetBody.getText().toString();
-        client.postTweet(tweetBody, new JsonHttpResponseHandler(){
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                super.onSuccess(statusCode, headers, response);
-                Toast.makeText(getActivity(), "Success in posting a tweet", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                super.onFailure(statusCode, headers, throwable, errorResponse);
-            }
-        });
-    }*/
 
 }

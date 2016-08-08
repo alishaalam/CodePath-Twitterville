@@ -3,12 +3,14 @@ package com.codepath.apps.twitterville.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.codepath.apps.twitterville.R;
@@ -16,6 +18,7 @@ import com.codepath.apps.twitterville.adapters.TweetAdapter;
 import com.codepath.apps.twitterville.fragments.ComposeTweetDialogFragment;
 import com.codepath.apps.twitterville.helper.ClickListener;
 import com.codepath.apps.twitterville.helper.EndlessRecyclerViewScrollListener;
+import com.codepath.apps.twitterville.helper.FragmentUtil;
 import com.codepath.apps.twitterville.helper.RecyclerTouchListener;
 import com.codepath.apps.twitterville.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -36,34 +39,35 @@ public class TimeLineActivity extends AppCompatActivity implements ComposeTweetD
     TweetAdapter tweetAdapter;
     ArrayList<Tweet> tweetsList = new ArrayList<>();
 
-    ComposeTweetDialogFragment editNameDialogFragment;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_time_line);
 
-        client = TwitterApplication.getRestClient(); //get a singleton client
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
+        //Set the title
+        TextView tv = (TextView) findViewById(R.id.tv_title_custom_font);
+        tv.setText(R.string.title_activity_time_line);
+        int titleColor = ContextCompat.getColor(this, R.color.colorAccent);
+        tv.setTextColor(titleColor);
+
+        //Set the compose tweet button
         FloatingActionButton btn_compose_tweet = (FloatingActionButton) findViewById(R.id.btn_compose_tweet);
         if (btn_compose_tweet != null) {
             btn_compose_tweet.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    showComposeTweetDialog();
+                    FragmentUtil.showComposeTweetDialog(getSupportFragmentManager());
+
                 }
             });
         }
 
+        client = TwitterApplication.getRestClient(); //get a singleton client
         setupRecyclerView();
         populateTimeLine(0); //since_id & max_id are set to 0 for the first call to populate tweets
-    }
-
-    private void showComposeTweetDialog() {
-        FragmentManager fm = getSupportFragmentManager();
-        editNameDialogFragment = ComposeTweetDialogFragment.newInstance("Tweet");
-        editNameDialogFragment.show(fm, "fragment_edit_name");
-
     }
 
     private void setupRecyclerView() {
