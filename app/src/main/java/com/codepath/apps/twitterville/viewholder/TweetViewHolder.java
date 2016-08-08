@@ -31,6 +31,9 @@ public class TweetViewHolder extends RecyclerView.ViewHolder{
     @Nullable @BindView(R.id.tv_age)
     public TextView vTweetAge;
 
+    @Nullable @BindView(R.id.iv_tweet_pic)
+    public ImageView vTweetPic;
+
 
     public TweetViewHolder(View itemView) {
         super(itemView);

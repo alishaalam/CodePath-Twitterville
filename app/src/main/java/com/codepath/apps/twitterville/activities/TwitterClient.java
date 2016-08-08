@@ -28,7 +28,7 @@ public class TwitterClient extends OAuthBaseClient {
 	public static final String REST_CONSUMER_SECRET = "ZvFxidnlarXdoBhr8mWs5drjYSefEWFWloQFxAAdLhzPjl66If";
 	public static final String REST_CALLBACK_URL = "oauth://apptweets"; // Change this (here and in manifest)
 
-	public static final int TWEET_COUNT = 10;
+	public static final int TWEET_COUNT = 20;
 
 	public TwitterClient(Context context) {
 		super(context, REST_API_CLASS, REST_URL, REST_CONSUMER_KEY, REST_CONSUMER_SECRET, REST_CALLBACK_URL);
@@ -63,6 +63,7 @@ public class TwitterClient extends OAuthBaseClient {
 		if(max_id != 0) {
 			params.put("max_id", max_id);
 		}
+		params.put("include_entities", "true");
 		//Execute the request
 		getClient().get(apiUrl, params, handler);
 	}

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -38,6 +39,10 @@ public class TimeLineActivity extends AppCompatActivity implements ComposeTweetD
     private TwitterClient client;
     TweetAdapter tweetAdapter;
     ArrayList<Tweet> tweetsList = new ArrayList<>();
+    private RecyclerView recyclerView;
+    private SwipeRefreshLayout swipeContainer;
+    private static long MAX_ID = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +51,7 @@ public class TimeLineActivity extends AppCompatActivity implements ComposeTweetD
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
 
         //Set the title
         TextView tv = (TextView) findViewById(R.id.tv_title_custom_font);
@@ -67,11 +73,34 @@ public class TimeLineActivity extends AppCompatActivity implements ComposeTweetD
 
         client = TwitterApplication.getRestClient(); //get a singleton client
         setupRecyclerView();
-        populateTimeLine(0); //since_id & max_id are set to 0 for the first call to populate tweets
+        setupSwipeContainer();
+        populateTimeLine(MAX_ID); //since_id & max_id are set to 0 for the first call to populate tweets
+    }
+
+    private void setupSwipeContainer() {
+        // Lookup the swipe container view
+        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
+        // Setup refresh listener which triggers new data loading
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Your code to refresh the list here.
+                // Make sure you call swipeContainer.setRefreshing(false)
+                // once the network request has completed successfully.
+                swipeContainer.setRefreshing(true);
+                populateTimeLine(MAX_ID);
+            }
+        });
+        // Configure the refreshing colors
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+
     }
 
     private void setupRecyclerView() {
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.tweet_list);
+        recyclerView = (RecyclerView) findViewById(R.id.tweet_list);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -86,7 +115,7 @@ public class TimeLineActivity extends AppCompatActivity implements ComposeTweetD
             public void onLoadMore(int page, int totalItemsCount) {
                 // Triggered only when new data needs to be appended to the list
                 // Add whatever code is needed to append new items to the bottom of the list
-                populateTimeLine( getLowestId(tweetsList));
+                populateTimeLine(MAX_ID);
             }
         });
 
@@ -114,6 +143,7 @@ public class TimeLineActivity extends AppCompatActivity implements ComposeTweetD
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray jsonResponse) {
                 super.onSuccess(statusCode, headers, jsonResponse);
+                swipeContainer.setRefreshing(false);
                 parseJsonResponseToTweets(jsonResponse);
                 Log.d(TAG, "getTweetsForHomeTimeLine Response: " + jsonResponse.toString());
             }
@@ -121,6 +151,7 @@ public class TimeLineActivity extends AppCompatActivity implements ComposeTweetD
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 super.onFailure(statusCode, headers, throwable, errorResponse);
+                swipeContainer.setRefreshing(false);
                 Log.d(TAG, "getTweetsForHomeTimeLine Failure: " + errorResponse.toString());
                 displayErrorResponse();
             }
@@ -151,6 +182,9 @@ public class TimeLineActivity extends AppCompatActivity implements ComposeTweetD
     }
 
     private void parseJsonResponseToTweets(JSONArray jsonResponse) {
+        List<Tweet> newList = new ArrayList<>();
+        newList.addAll(Tweet.fromJsonArray(jsonResponse));
+        MAX_ID = getLowestId(newList);
         tweetsList.addAll(Tweet.fromJsonArray(jsonResponse));
         displayTweets();
     }
@@ -173,4 +207,6 @@ public class TimeLineActivity extends AppCompatActivity implements ComposeTweetD
         }
         return min;
     }
+
+
 }

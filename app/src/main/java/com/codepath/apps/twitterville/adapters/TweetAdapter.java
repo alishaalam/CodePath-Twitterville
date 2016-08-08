@@ -16,6 +16,7 @@ import com.codepath.apps.twitterville.viewholder.TweetViewHolder;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -61,6 +62,10 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetViewHolder> {
 
             String tweetAge = getTweetAge(tweet.getTweetTime());
             tweetViewHolder.vTweetAge.setText(tweetAge);
+
+           /* Glide.with(mContext)
+                    .load(tweet)
+                    .into(tweetViewHolder.vTweetPic);*/
         }
     }
 
@@ -92,5 +97,19 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetViewHolder> {
         tweetAge = tweetAge.replace(" days ago","d");
         Log.v(TAG, "tweetAge:" + tweetAge);
         return tweetAge;
+    }
+
+
+    /**Methods supporting SwipeRefreshLayout*/
+
+    public void clear() {
+        mTweetsList.clear();
+        notifyDataSetChanged();
+    }
+
+    // Add a list of items
+    public void addAll(List<Tweet> list) {
+        mTweetsList.addAll(list);
+        notifyDataSetChanged();
     }
 }

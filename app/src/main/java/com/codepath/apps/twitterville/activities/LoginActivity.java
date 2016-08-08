@@ -2,34 +2,56 @@ package com.codepath.apps.twitterville.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
+import android.os.Handler;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
 
 import com.codepath.apps.twitterville.R;
 import com.codepath.oauth.OAuthLoginActionBarActivity;
+import com.skyfishjy.library.RippleBackground;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import tyrantgit.explosionfield.ExplosionField;
 
 public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
+	RippleBackground rippleBackground;
+	Handler mHandler;
+	private ExplosionField mExplosionField;
+	private static final String TAG = LoginActivity.class.getSimpleName();
+	private static int COUNTER = 0;
+
+	@BindView(R.id.centerImage)
+	ImageView loginImage;
+
+	@BindView(R.id.btn_login)
+	Button loginButton;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
-	}
+		ButterKnife.bind(this);
+		mExplosionField = ExplosionField.attach2Window(this);
+		//addListener(loginImage);
 
+		mHandler = new Handler();
 
-	// Inflate the menu; this adds items to the action bar if it is present.
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.login, menu);
-		return true;
+		rippleBackground = (RippleBackground) findViewById(R.id.content);
 	}
 
 	// OAuth authenticated successfully, launch primary authenticated activity
 	// i.e Display application "homepage"
 	@Override
 	public void onLoginSuccess() {
-		Intent i = new Intent(this, TimeLineActivity.class);
-		startActivity(i);
+		mHandler.postDelayed(new Runnable() {
+			public void run() {
+				Intent i = new Intent(LoginActivity.this, TimeLineActivity.class);
+				startActivity(i);
+			}
+		}, 3000);
 
 	}
 
@@ -46,5 +68,48 @@ public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
 	public void loginToRest(View view) {
 		getClient().connect();
 	}
+
+	public void onExplodeElements(View v) {
+
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		Log.v(TAG, "In onResume");
+		if(COUNTER == 1){
+			onLoginImageClick(findViewById(R.id.centerImage));
+		}
+	}
+
+	@Override
+	protected void onRestart() {
+		super.onRestart();
+		Log.v(TAG, "In onRestart");
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		rippleBackground.stopRippleAnimation();
+	}
+
+	public void onLoginImageClick(final View v) {
+		Log.v(TAG, "Counter: "+ COUNTER);
+		if(COUNTER == 0)
+			rippleBackground.startRippleAnimation();
+		else {
+			mHandler.postDelayed(new Runnable() {
+				public void run() {
+					mExplosionField.explode(v);
+					mExplosionField.explode(findViewById(R.id.btn_login));
+					Log.v(TAG, "Explosion!!!!!!!!!!!");
+				}
+			}, 2000);
+
+		}
+		COUNTER++;
+	}
+
 
 }
